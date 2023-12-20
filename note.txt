@@ -74,3 +74,6 @@ relationship
 _________________________________________________
 $this->request->getData('postId'); #post method
 $this->request->getQuery('postId'); #get method
+
+
+CsrfComponent.php
