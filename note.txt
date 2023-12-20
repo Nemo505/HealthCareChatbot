@@ -1,0 +1,76 @@
+migration
+    bin/cake bake migration create_users
+    bin/cake migrations rollback
+    bin/cake migrations migrate
+
+Clear all cache configs:
+    bin/cake cache clear_all
+
+model 
+    bin/cake bake model MyModelName (camel case)
+    
+Controller
+    bin/cake bake controller Articles
+
+
+use all
+    bin\cake bake all users
+
+authen php8.1, cake4.5
+    composer require cakephp/authentication:^2.6
+
+#hashpasswrod 
+
+tailwindCss
+    npx tailwindcss -i ./webroot/css/input.css -o ./webroot/css/output.css --watch
+
+keys
+    shwe@gmail.com
+    $10$4lj8jrOQ9sYchLU5uEbEWOLH2sJItG4NzX48dhtfpfxmHXLKcE8lW
+
+foreign keys
+    
+_________________________________________________
+
+controller with no table, just for view
+      public function index()
+    {
+        // Load the Users model
+        $this->loadModel('Users');
+
+        // Fetch data from the Users model
+        $usersData = $this->Users->find('all');
+
+        // Pass data to the view
+        $this->set('users', $usersData);
+    }
+_________________________________________________
+ Error SQLSTATE[HY000]: General error: 1364 Field 'created' doesn't have a default value 
+    $this->addBehavior('Timestamp');
+
+adding fontawesome
+    webroot/css/fontawesome.min.css
+    webroot/script/all.js
+    webroot/webfonts
+
+    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output', 'fontawesome.min']) ?>
+    <?= $this->Html->script('all.js') ?>
+
+What is alias 
+    # In a controller or Table class
+    $this->loadModel('Users'); // Load the UsersTable
+    $this->Users->alias('Members'); // Set the alias to 'Members'
+
+    # Now you can use the alias in your code
+    $members = $this->Members->find('all');
+
+relationship
+    ->one to many 
+    $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+        ]);
+    $this->hasMany('Posts');
+
+_________________________________________________
+$this->request->getData('postId'); #post method
+$this->request->getQuery('postId'); #get method
