@@ -29,7 +29,14 @@ keys
     $10$4lj8jrOQ9sYchLU5uEbEWOLH2sJItG4NzX48dhtfpfxmHXLKcE8lW
 
 foreign keys
-    
+        $postTable->addColumn('user_id', 'integer', [
+            'default' => null,
+            'null' => true,
+        ]);
+        $postTable->addForeignKey('user_id', 'users', 'id', [
+            'delete' => 'SET_NULL', // Define behavior on DELETE
+            'update' => 'CASCADE', // Define behavior on UPDATE
+        ]); 
 _________________________________________________
 
 controller with no table, just for view
