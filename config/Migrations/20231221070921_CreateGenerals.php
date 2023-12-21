@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class CreateGeneralInfo extends AbstractMigration
+class CreateGenerals extends AbstractMigration
 {
     /**
      * Change Method.
@@ -14,8 +14,7 @@ class CreateGeneralInfo extends AbstractMigration
      */
     public function change(): void
     {
-        $generalTable = $this->table('general_info');
-
+        $generalTable = $this->table('generals');
         $generalTable->addColumn('title', 'string', [
             'default' => null,
             'limit' => 255,
