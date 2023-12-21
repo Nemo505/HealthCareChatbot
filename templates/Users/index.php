@@ -25,7 +25,13 @@
                 <tr>
                     <td><?= $this->Number->format($user->id) ?></td>
                     <td><?= h($user->username) ?></td>
-                    <td><?= h($user->avatar) ?></td>
+                    <td>
+                        <?php if (!empty($user->avatar)): ?>
+                            <img src="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>" alt="Avatar" class="w-16 h-16 rounded-full">
+                        <?php else: ?>
+                            No Avatar
+                        <?php endif; ?>
+                    </td>
                     <td><?= h($user->email) ?></td>
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>

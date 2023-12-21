@@ -27,23 +27,31 @@ $cakeDescription = 'Health Care';
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output']) ?>
+    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output', 'chat']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
+  
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
+
 </head>
 <body>
-    <nav class="top-nav">
-        <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Health</span>Care</a>
+    <nav style="background-color: rgba(0, 12, 0, 0.8); padding: 2rem;">
+        <div style="color: white; font-size: 2rem; font-weight: bold;">
+            <a href="<?= $this->Url->build('/') ?>" style="text-decoration: none; color: white;">
+                <span style="color: #f7d418;">⛑️</span> Health <span style="color: #f7d418;"></span> Care ChatBot
+            </a>
         </div>
     </nav>
+
     <main class="main">
-        <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
-        </div>
     </main>
     <footer>
     </footer>
