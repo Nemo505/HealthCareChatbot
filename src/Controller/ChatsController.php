@@ -35,7 +35,8 @@ class ChatsController extends AppController
 
         // Assuming 'category' in the AJAX request
         $category = isset($data['category']) ? $data['category'] : null;
-        $newUserMessage = isset($data['newUserMessage']) ? $data['newUserMessage'] : null;
+        $newUserMessage = isset($data['content']) ? $data['content'] : null;
+        $keywords = explode(' ', $newUserMessage);
 
         if ($category === 'General Information') {
             $this->loadModel('Generals');
@@ -45,15 +46,28 @@ class ChatsController extends AppController
             
         } elseif ($category === 'Symptom') {
             $this->loadModel('Symptoms');
-            $categoryData = $this->Symptoms->find()
-                        ->where(['name LIKE' => '%' . $newUserMessage . '%'])
-                        ->first();
+
+            $conditions = [];
+            foreach ($keywords as $keyword) {
+                $conditions['OR'][] = ['Symptoms.name LIKE' => "%$keyword%"];
+            }
+            
+            $categoryData = $this->Symptoms->find('all', [
+                'conditions' => $conditions,
+            ])->first();
+          
 
         } elseif ($category === 'Treatment') {
             $this->loadModel('Treatments');
-            $categoryData = $this->Treatments->find()
-                        ->where(['name LIKE' => '%' . $newUserMessage . '%'])
-                        ->first();
+            
+            $conditions = [];
+            foreach ($keywords as $keyword) {
+                $conditions['OR'][] = ['Treatments.name LIKE' => "%$keyword%"];
+            }
+
+            $categoryData = $this->Treatments->find('all', [
+                'conditions' => $conditions,
+            ])->first();
         } 
         echo json_encode(['chatbotMessage' => $categoryData]);
         

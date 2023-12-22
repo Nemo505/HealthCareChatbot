@@ -79,7 +79,6 @@
             content: "I'm sorry, I didn't understand that category."
           });
         }
-      console.log(category);
     sendMessageToServer(category);
   }
 
