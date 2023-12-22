@@ -12,6 +12,8 @@ model
 Controller
     bin/cake bake controller Articles
 
+view
+    bin/cake bake view Articles add
 
 use all
     bin\cake bake all users
@@ -84,3 +86,40 @@ $this->request->getQuery('postId'); #get method
 
 
 CsrfComponent.php
+
+_________________________________________________
+Main Categories
+Display main FAQ categories, such as "General Information," "Symptoms," and "Treatments."
+
+Category Selection 
+User Prompt:"What information are you looking for today?"
+Category Buttons: Buttons or tiles for each main category. For example:
+     - General Information
+     - Symptoms
+     - Treatments
+
+
+4. Text Input for Specific Questions
+User Prompt: "Feel free to ask any specific question or describe your symptoms."
+Text Input Field: Allow users to type or speak their questions.
+
+5. Response Display:
+   - Formatted Responses: Display responses from the database in a readable format. For example:
+     ```
+     Headache
+     Description: A headache is pain or discomfort in the head or face area. It can be caused by various factors, including stress, tension, or underlying medical conditions.
+     Treatment: Rest, hydration, and over-the-counter pain relievers may help alleviate symptoms. However, if headaches persist, consult with a healthcare professional.
+
+
+6. Related Questions:
+   - User Prompt: "Here are some related questions. Select one for more information."
+   - Buttons or Links: Provide buttons or links to related questions within the same category.
+
+7. Feedback Mechanism:
+   - User Prompt: "Was this information helpful?"
+   - Feedback Buttons: Include buttons like "Yes," "No," or emoji reactions for user feedback.
+
+### 8. Additional Features:
+   - **Search Functionality:** Allow users to search for specific terms or topics.
+   - **Voice Input:** Implement voice recognition for users who prefer to speak their questions.
+

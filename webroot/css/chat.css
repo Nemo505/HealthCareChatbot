@@ -409,3 +409,13 @@ Bounce
     transform: translateY(-10px);
   }
 }
+
+/* badge */
+.custom-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem; /* Adjust padding as needed */
+  border-radius: 1.25rem; /* 20px for a rounded-pill shape */
+  background-color: #5d6ba8a4; /* Replace with your primary color */
+  color: #ffffffc7; /* White text */
+  margin: 2px;
+}
