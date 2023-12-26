@@ -45,6 +45,7 @@
         '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'General Information\')">General Information</span>' +
         '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Symptom\')">Symptom</span>' +
         '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Treatment\')">Treatment</span>' +
+        '<div class="message-content">You can type "End" to end the process.</div>' +
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }else {
         $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure><div class="message-content">' + message.content + '</div></div>').appendTo($('.mCSB_container')).addClass('new')
@@ -55,7 +56,6 @@
   }
 
   function handleBadgeClick(category) {
-
       insertMessage(category, true);
         if (category === 'General Information') {
           insertMessage({
@@ -79,10 +79,9 @@
             content: "I'm sorry, I didn't understand that category."
           });
         }
-    sendMessageToServer(category);
+      sendMessageToServer(category);
   }
-
-
+  
   function fetchMessages() {
     if (!userAskedQuestion) {
       insertMessage({
@@ -97,41 +96,56 @@
   function sendMessageToServer(category) {
     $('.message-submit').click(function() {
       var newUserMessage = $('.message-input').val();
+      console.log(category);
 
       if ($.trim(newUserMessage) !== '') {
         insertMessage(newUserMessage, true); 
-        $.ajax({
-          type: 'POST',
-          url: '/chatbot/addMessages', // Update the URL to your CakePHP endpoint for adding messages
-          data: { content: newUserMessage, category: category },
-          success: function(response) {
-            if (response) {
-              var parsedResponse = JSON.parse(response);
-              var chatbotMessage = parsedResponse.chatbotMessage;
 
-              if (category === 'General Information') {
+        //check the word
+        if (newUserMessage.toLowerCase() === 'end') {
+            userAskedQuestion = false;
+            fetchMessages(); // Restart the conversation
+        }else {
+
+          $.ajax({
+            type: 'POST',
+            url: '/chatbot/addMessages', // Update the URL to your CakePHP endpoint for adding messages
+            data: { content: newUserMessage, category: category },
+            success: function(response) {
+              if (response.chatbotMessage) {
+                var parsedResponse = JSON.parse(response);
+                var chatbotMessage = parsedResponse.chatbotMessage;
+  
+                if (category === 'General Information') {
+                  insertMessage({
+                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+                     content: chatbotMessage.content
+                   });
+                  
+                } else if (category === 'Symptom') {
+                  insertMessage({
+                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+                     content: chatbotMessage.description
+                   });
+                } else if (category === 'Treatment'){
+                  insertMessage({
+                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+                     content: chatbotMessage.description
+                   });
+                }
+              }else{
                 insertMessage({
-                   avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                   content: chatbotMessage.content
-                 });
-                
-              } else if (category === 'Symptom') {
-                insertMessage({
-                   avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                   content: chatbotMessage.description
-                 });
-              } else if (category === 'Treatment'){
-                insertMessage({
-                   avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                   content: chatbotMessage.description
-                 });
+                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+                     content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                   });
               }
+            },
+            error: function(error) {
+              console.error('Error adding message:', error);
             }
-          },
-          error: function(error) {
-            console.error('Error adding message:', error);
-          }
-        });
+          });
+        }
+
       }
     });
   }
