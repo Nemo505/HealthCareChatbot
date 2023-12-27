@@ -17,8 +17,8 @@ class ChatsController extends AppController
      */
     public function index()
     {
-        $chats = $this->loadModel('Users');
-        $this->set(compact('chats'));
+        $user = $this->Authentication->getIdentity(); // Get the currently authenticated user
+        $this->set(compact('user'));
     }
 
     public function getMessages() {
@@ -40,9 +40,15 @@ class ChatsController extends AppController
 
         if ($category === 'General Information') {
             $this->loadModel('Generals');
-            $categoryData = $this->Generals->find()
-                        ->where(['title LIKE' => '%' . $newUserMessage . '%'])
-                        ->first();
+
+            $conditions = [];
+            foreach ($keywords as $keyword) {
+                $conditions['OR'][] = ['Generals.title LIKE' => "%$keyword%"];
+            }
+            
+            $categoryData = $this->Generals->find('all', [
+                'conditions' => $conditions,
+            ])->first();
             
         } elseif ($category === 'Symptom') {
             $this->loadModel('Symptoms');

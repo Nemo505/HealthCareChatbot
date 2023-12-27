@@ -1,10 +1,11 @@
 <div class="chat">
   <div class="chat-title">
     <h1>Fabio Ottaviani</h1>
-    <h2>Supah</h2>
-    <figure class="avatar">
-      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" />
+    <h2>Chyu</h2>
+    <figure class="avatar" data-avatar="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>">
+        <img src="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>" alt="Avatar" class="w-16 h-16 rounded-full">
     </figure>
+
   </div>
   <div class="messages">
     <div class="messages-content"></div>
@@ -18,7 +19,9 @@
 
 <script>
   var $messages = $('.messages-content');
-  var userAskedQuestion = false; // Flag to track whether the user has asked a question
+  var userAskedQuestion = false; 
+  var currentCategory = null;
+  var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
 
   $(window).load(function() {
     $messages.mCustomScrollbar();
@@ -56,36 +59,37 @@
   }
 
   function handleBadgeClick(category) {
+      currentCategory = category;
       insertMessage(category, true);
         if (category === 'General Information') {
           insertMessage({
-          avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+          avatar: avatarUrl,
           content: 'What specific information are you looking for?'
           });
 
         } else if (category === 'Symptom') {
           insertMessage({
-            avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+            avatar: avatarUrl,
             content: 'Tell me more about the symptoms you are experiencing.'
           });
         } else if (category === 'Treatment') {
           insertMessage({
-            avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+            avatar: avatarUrl,
             content: 'Are you interested in treatment options? If so, for what condition?'
           });
         } else {
           insertMessage({
-            avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+            avatar: avatarUrl,
             content: "I'm sorry, I didn't understand that category."
           });
         }
-      sendMessageToServer(category);
+      
   }
-  
+
   function fetchMessages() {
     if (!userAskedQuestion) {
       insertMessage({
-        avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
+        avatar: avatarUrl,
         content: 'How can I help you?',
         button: true,
       });
@@ -93,62 +97,71 @@
   }
 
   
-  function sendMessageToServer(category) {
-    $('.message-submit').click(function() {
-      var newUserMessage = $('.message-input').val();
-      console.log(category);
+  $('.message-submit').click(function() {
+    var newUserMessage = $('.message-input').val();
+    if ($.trim(newUserMessage) !== '' && currentCategory) {
+      insertMessage(newUserMessage, true); 
 
-      if ($.trim(newUserMessage) !== '') {
-        insertMessage(newUserMessage, true); 
+      // Clear the input message in the input box
+      $('.message-input').val('');
 
-        //check the word
-        if (newUserMessage.toLowerCase() === 'end') {
-            userAskedQuestion = false;
-            fetchMessages(); // Restart the conversation
-        }else {
+      //check the word
+      if (newUserMessage.toLowerCase() === 'end') {
+          userAskedQuestion = false;
+          currentCategory = null;
+          fetchMessages(); // Restart the conversation
+      }else {
 
-          $.ajax({
-            type: 'POST',
-            url: '/chatbot/addMessages', // Update the URL to your CakePHP endpoint for adding messages
-            data: { content: newUserMessage, category: category },
-            success: function(response) {
-              if (response.chatbotMessage) {
-                var parsedResponse = JSON.parse(response);
+        $.ajax({
+          type: 'POST',
+          url: '/chatbot/addMessages', // Update the URL to your CakePHP endpoint for adding messages
+          data: { content: newUserMessage, category: currentCategory },
+          success: function(response) {
+            
+            if (response) {
+              var parsedResponse = JSON.parse(response);
+              if (parsedResponse.chatbotMessage) {
+                
                 var chatbotMessage = parsedResponse.chatbotMessage;
-  
-                if (category === 'General Information') {
+                
+                if (currentCategory === 'General Information') {
                   insertMessage({
-                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                     content: chatbotMessage.content
-                   });
+                      avatar: avatarUrl,
+                      content: chatbotMessage.content
+                    });
                   
-                } else if (category === 'Symptom') {
+                } else if (currentCategory === 'Symptom') {
                   insertMessage({
-                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                     content: chatbotMessage.description
-                   });
-                } else if (category === 'Treatment'){
+                      avatar: avatarUrl,
+                      content: chatbotMessage.description
+                    });
+                } else if (currentCategory === 'Treatment'){
                   insertMessage({
-                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                     content: chatbotMessage.description
-                   });
+                      avatar: avatarUrl,
+                      content: chatbotMessage.description
+                    });
                 }
               }else{
                 insertMessage({
-                     avatar: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg',
-                     content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
-                   });
+                      avatar: avatarUrl,
+                      content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                    });
               }
-            },
-            error: function(error) {
-              console.error('Error adding message:', error);
+            }else{
+              insertMessage({
+                    avatar: avatarUrl,
+                    content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                  });
             }
-          });
-        }
-
+          },
+          error: function(error) {
+            console.error('Error adding message:', error);
+          }
+        });
       }
-    });
-  }
+
+    }
+  });
 
   $(window).on('keydown', function(e) {
     if (e.which === 13) {

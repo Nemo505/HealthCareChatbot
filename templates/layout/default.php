@@ -41,18 +41,32 @@ $cakeDescription = 'Health Care';
 
 </head>
 <body>
-    <nav style="background-color: rgba(0, 12, 0, 0.8); padding: 2rem;">
-        <div style="color: white; font-size: 2rem; font-weight: bold;">
-            <a href="<?= $this->Url->build('/') ?>" style="text-decoration: none; color: white;">
-                <span style="color: #f7d418;">⛑️</span> Health <span style="color: #f7d418;"></span> Care ChatBot
-            </a>
-        </div>
-    </nav>
+    
+    <?php if (!($this->getRequest()->getParam('controller') === 'Users' && $this->getRequest()->getParam('action') === 'login')) : ?>
+        <nav style="background-color: rgba(0, 12, 0, 0.8); padding: 1rem;">
+            <div style="color: white; display:flex; justify-content: space-between; align-items: center;">
+                <a href="<?= $this->Url->build('/') ?>" style="text-decoration: none; color: white; font-weight: bold; font-size: 2rem;">
+                    <span style="color: #f7d418;">⛑️</span> Health <span style="color: #f7d418;"></span> Care ChatBot
+                </a>
+                <form action="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>" method="post">
+                    <button type="submit" style="background: linear-gradient(to right, #4E5551, rgba(235, 167, 167, 0.57));
+                                                color: #fff; padding: 10px 15px; 
+                                                border: none; 
+                                                border-radius: 4px; 
+                                                cursor: pointer;">
+                        Logout
+                    </button>
+                </form>
+
+            </div>
+        </nav>
+    <?php endif; ?>
 
     <main class="main">
-            <?= $this->Flash->render() ?>
-            <?= $this->fetch('content') ?>
+        <?= $this->Flash->render() ?>
+        <?= $this->fetch('content') ?>
     </main>
+
     <footer>
     </footer>
 </body>
