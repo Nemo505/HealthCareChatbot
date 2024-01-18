@@ -419,3 +419,19 @@ Bounce
   color: #ffffffc7; /* White text */
   margin: 2px;
 }
+
+/* CSS */
+.translate-text {
+    position: fixed;
+    bottom: -2px;
+    right: 10px;
+    padding: 5px;
+    color: rgba(255, 255, 255, 0.432);
+    cursor: pointer;
+    font-size: xx-small;
+}
+
+.translate-text:hover {
+    color: rgba(248, 242, 242, 0.829);
+}
+

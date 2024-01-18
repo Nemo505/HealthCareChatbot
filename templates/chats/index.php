@@ -22,6 +22,13 @@
   var userAskedQuestion = false; 
   var currentCategory = null;
   var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
+  var translations = {
+    'How can I help you?': 'どのようにお手伝いできますか？',
+    'General Information': '一般的な情報',
+    'Symptom': '病状',
+    'Treatment': '治療',
+    'You can type "End" to end the process.': 'プロセスを終了するには、「End」と入力できます。',
+  };
 
   $(window).load(function() {
     $messages.mCustomScrollbar();
@@ -43,20 +50,41 @@
     }else{
 
       if (message.button) {
-        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div class="message-content">' + message.content + '</div>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'General Information\')">General Information</span>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Symptom\')">Symptom</span>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Treatment\')">Treatment</span>' +
-        '<div class="message-content">You can type "End" to end the process.</div>' +
+        $('<div class="message new generalInfo"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+        '<div>How can I help you? </div>' +
+        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'General Information\')">General Information </span>' +
+        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Symptom\')">Symptom </span>' +
+        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Treatment\')">Treatment </span>' +
+        '<div style=" padding-bottom:15px;">You can type "End" to end the process. </div>' +
+        '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }else {
-        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure><div class="message-content">' + message.content + '</div></div>').appendTo($('.mCSB_container')).addClass('new')
+        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+        '<div>' + message.content + '</div>' +
+        '</div>').appendTo($('.mCSB_container')).addClass('new');
       }
     }
 
     updateScrollbar();
   }
+
+  function translateMessage() {
+    $('.generalInfo').each(function () {
+      const originalText = $(this).text();
+      console.log(originalText);
+
+      const translatedText = translations[originalText];
+
+      console.log(translations[originalText]);
+      console.log(translatedText);
+      if (translatedText !== undefined) {
+        $(this).text(translatedText);
+      } else {
+        console.warn('Translation not found for:', originalText);
+      }
+    });
+  }
+
 
   function handleBadgeClick(category) {
       currentCategory = category;
