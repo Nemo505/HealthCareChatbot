@@ -22,6 +22,7 @@
   var userAskedQuestion = false; 
   var currentCategory = null;
   var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
+  var currentLanguage = 'en';
   var translations = {
     'How can I help you?': 'どのようにお手伝いできますか？',
     'General Information': '一般的な情報',
@@ -29,6 +30,7 @@
     'Treatment': '治療',
     'You can type "End" to end the process.': 'プロセスを終了するには、「End」と入力できます。',
   };
+  var currentLanguage = 'en'; // Default language is English
 
   $(window).load(function() {
     $messages.mCustomScrollbar();
@@ -50,12 +52,12 @@
     }else{
 
       if (message.button) {
-        $('<div class="message new generalInfo"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div>How can I help you? </div>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'General Information\')">General Information </span>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Symptom\')">Symptom </span>' +
-        '<span class="custom-badge cursor-pointer" onclick="handleBadgeClick(\'Treatment\')">Treatment </span>' +
-        '<div style=" padding-bottom:15px;">You can type "End" to end the process. </div>' +
+        $('<div class="message new "><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+        '<div class="generalInfo">How can I help you?</div>' +
+        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'General Information\')">General Information</span>' +
+        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Symptom\')">Symptom</span>' +
+        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Treatment\')">Treatment</span>' +
+        '<div class="generalInfo" style=" padding-bottom:15px;">You can type "End" to end the process.</div>' +
         '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }else {
@@ -68,49 +70,58 @@
     updateScrollbar();
   }
 
-  function translateMessage() {
-    $('.generalInfo').each(function () {
-      const originalText = $(this).text();
-      console.log(originalText);
-
-      const translatedText = translations[originalText];
-
-      console.log(translations[originalText]);
-      console.log(translatedText);
-      if (translatedText !== undefined) {
-        $(this).text(translatedText);
-      } else {
-        console.warn('Translation not found for:', originalText);
-      }
-    });
-  }
-
-
   function handleBadgeClick(category) {
       currentCategory = category;
-      insertMessage(category, true);
-        if (category === 'General Information') {
-          insertMessage({
-          avatar: avatarUrl,
-          content: 'What specific information are you looking for?'
-          });
-
-        } else if (category === 'Symptom') {
-          insertMessage({
+      if (currentLanguage === 'jp') {
+          insertMessage(translations[category], true);
+          if (category === 'General Information') {
+            insertMessage({
             avatar: avatarUrl,
-            content: 'Tell me more about the symptoms you are experiencing.'
-          });
-        } else if (category === 'Treatment') {
-          insertMessage({
+            content: '具体的な情報は何をお探しですか？'
+            });
+    
+          } else if (category === 'Symptom') {
+            insertMessage({
+              avatar: avatarUrl,
+              content: '経験している症状について詳しく教えてください。'
+            });
+          } else if (category === 'Treatment') {
+            insertMessage({
+              avatar: avatarUrl,
+              content: '治療の選択肢に興味がありますか？もしそうなら、どの症状に対してですか？'
+            });
+          } else {
+            insertMessage({
+              avatar: avatarUrl,
+              content: "申し訳ありませんが、そのカテゴリーが理解できませんでした。"
+            });
+          }
+      } else if (currentLanguage === 'en') {
+          insertMessage(category, true);
+          if (category === 'General Information') {
+            insertMessage({
             avatar: avatarUrl,
-            content: 'Are you interested in treatment options? If so, for what condition?'
-          });
-        } else {
-          insertMessage({
-            avatar: avatarUrl,
-            content: "I'm sorry, I didn't understand that category."
-          });
-        }
+            content: 'What specific information are you looking for?'
+            });
+    
+          } else if (category === 'Symptom') {
+            insertMessage({
+              avatar: avatarUrl,
+              content: 'Tell me more about the symptoms you are experiencing.'
+            });
+          } else if (category === 'Treatment') {
+            insertMessage({
+              avatar: avatarUrl,
+              content: 'Are you interested in treatment options? If so, for what condition?'
+            });
+          } else {
+            insertMessage({
+              avatar: avatarUrl,
+              content: "I'm sorry, I didn't understand that category."
+            });
+          }
+      }
+      
       
   }
 
@@ -198,4 +209,41 @@
       return false;
     }
   });
+
+  //translation
+  function translateMessage() {
+    var translateElements = document.querySelectorAll('.generalInfo');
+
+    // Iterate through each element and update its text content
+    translateElements.forEach(function (element) {
+      var originalContent = element.innerHTML;
+
+      // Check if the current language is English or Japanese and update accordingly
+      element.textContent = translateContent(originalContent);
+    });
+
+    // Toggle the language
+    currentLanguage = currentLanguage === 'en' ? 'jp' : 'en';
+  }
+
+  function translateContent(content) {
+    if (currentLanguage === 'jp') {
+      Object.keys(translations).forEach(function (key) {
+        content = content.replace(new RegExp(escapeRegExp(translations[key]), 'g'), key);
+      });
+      
+    } else if (currentLanguage === 'en') {
+      // Reverse the translations to switch from Japanese back to English
+      Object.keys(translations).forEach(function (key) {
+        content = content.replace(new RegExp(escapeRegExp(key), 'g'), translations[key]);
+      });
+    }
+
+    return content;
+  }
+
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
 </script>
