@@ -62,7 +62,8 @@
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }else {
         $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div>' + message.content + '</div>' +
+        '<div style=" padding-bottom:15px;">' + message.content + '</div>' +
+        '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }
     }
@@ -150,7 +151,6 @@
           currentCategory = null;
           fetchMessages(); // Restart the conversation
       }else {
-
         $.ajax({
           type: 'POST',
           url: '/chatbot/addMessages', // Update the URL to your CakePHP endpoint for adding messages

@@ -2,6 +2,10 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+require_once ROOT . DS . 'vendor' . DS . 'autoload.php';
+
+use Statickidz\GoogleTranslate;
+use LanguageDetection\Language;
 
 /**
  * Chats Controller
@@ -30,14 +34,23 @@ class ChatsController extends AppController
 
     public function addMessages() {
         $this->autoRender = false;
-        
         $data = $this->request->getData();
 
         // Assuming 'category' in the AJAX request
         $category = isset($data['category']) ? $data['category'] : null;
         $newUserMessage = isset($data['content']) ? $data['content'] : null;
-        $keywords = explode(' ', $newUserMessage);
 
+        $ld = new Language;
+        $detectedLanguage = $ld->detect($newUserMessage)->bestResults()->close();
+
+        if (isset($detectedLanguage['ja'])) {
+            $trans = new GoogleTranslate();
+            $japaneseMessage = $trans->translate('ja', 'en', $newUserMessage);
+            $keywords = explode(' ', $japaneseMessage);
+        }else{
+            $keywords = explode(' ', $newUserMessage);
+        }
+        
         if ($category === 'General Information') {
             $this->loadModel('Generals');
 
@@ -61,7 +74,6 @@ class ChatsController extends AppController
             $categoryData = $this->Symptoms->find('all', [
                 'conditions' => $conditions,
             ])->first();
-          
 
         } elseif ($category === 'Treatment') {
             $this->loadModel('Treatments');

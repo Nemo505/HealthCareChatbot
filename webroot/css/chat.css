@@ -431,7 +431,7 @@ Bounce
     font-size: xx-small;
 }
 
-.translate-text:hover {
+.myanmarFlag:hover, .englishFlag:hover, .japaneseFlag:hover {
     color: rgba(248, 242, 242, 0.829);
 }
 
