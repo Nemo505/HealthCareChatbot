@@ -58,6 +58,7 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/', ['controller' => 'Chats', 'action' => 'index']);
         $builder->connect('/chatbot/getMessages', ['controller' => 'Chats', 'action' => 'getMessages']);
         $builder->connect('/chatbot/addMessages', ['controller' => 'Chats', 'action' => 'addMessages']);
+        $builder->connect('/chatbot/googleTranslate', ['controller' => 'Chats', 'action' => 'googleTranslate']);
 
         /*
          * ...and connect the rest of 'Pages' controller's URLs.

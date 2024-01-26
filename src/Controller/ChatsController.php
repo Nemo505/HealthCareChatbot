@@ -87,8 +87,33 @@ class ChatsController extends AppController
                 'conditions' => $conditions,
             ])->first();
         } 
+
+        if (isset($detectedLanguage['ja'])) {
+            $trans = new GoogleTranslate();
+            $categoryData = $trans->translate('en', 'ja', $categoryData);
+        }
+        
         echo json_encode(['chatbotMessage' => $categoryData]);
         
+    }
+
+    public function googleTranslate()
+    {
+        $this->autoRender = false;
+        $data = $this->request->getData();
+        $newUserMessage = isset($data['content']) ? $data['content'] : null;
+
+        $ld = new Language;
+        $detectedLanguage = $ld->detect($newUserMessage)->bestResults()->close();
+        if (isset($detectedLanguage['ja'])) {
+            $trans = new GoogleTranslate();
+            $translatedMessage = $trans->translate('ja', 'en', $newUserMessage);
+        }else{
+            $trans = new GoogleTranslate();
+            $translatedMessage = $trans->translate('en', 'ja', $newUserMessage);
+        }
+        echo json_encode(['translatedMessage' => $translatedMessage]);
+
     }
 
 }

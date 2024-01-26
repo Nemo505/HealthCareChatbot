@@ -62,8 +62,8 @@
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }else {
         $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div style=" padding-bottom:15px;">' + message.content + '</div>' +
-        '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
+        '<div style=" padding-bottom:15px; class="toTranslate">' + message.content + '</div>' +
+        '<div class="translate-text" onclick="translateUserMessage(this.previousElementSibling)">🔄Translate</div>'+
         '</div>').appendTo($('.mCSB_container')).addClass('new');
       }
     }
@@ -163,18 +163,18 @@
                 
                 var chatbotMessage = parsedResponse.chatbotMessage;
                 
-                if (currentCategory === 'General Information') {
+               if (currentCategory === 'General Information' || currentCategory === '一般的な情報') {
                   insertMessage({
                       avatar: avatarUrl,
                       content: chatbotMessage.content
                     });
                   
-                } else if (currentCategory === 'Symptom') {
+                } else if (currentCategory === 'Symptom' || currentCategory === '病状') {
                   insertMessage({
                       avatar: avatarUrl,
                       content: chatbotMessage.description
                     });
-                } else if (currentCategory === 'Treatment'){
+                } else if (currentCategory === 'Treatment' || currentCategory == '治療'){
                   insertMessage({
                       avatar: avatarUrl,
                       content: chatbotMessage.description
@@ -246,4 +246,19 @@
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
+  function translateUserMessage(clickedElement){
+    var contentToTranslate = clickedElement.innerHTML;
+
+    $.ajax({
+          type: 'POST',
+          url: '/chatbot/googleTranslate', // Update the URL to your CakePHP endpoint for adding messages
+          data: { content:  contentToTranslate},
+          success: function(response) {
+              var parsedResponse = JSON.parse(response);
+              var translatedContent = parsedResponse.translatedMessage;
+              clickedElement.innerHTML = translatedContent;
+          }
+    })
+
+  }
 </script>
