@@ -162,23 +162,24 @@
               if (parsedResponse.chatbotMessage) {
                 
                 var chatbotMessage = parsedResponse.chatbotMessage;
+                console.log(chatbotMessage);
                 
                if (currentCategory === 'General Information' || currentCategory === '一般的な情報') {
                   insertMessage({
                       avatar: avatarUrl,
-                      content: chatbotMessage.content
+                      content: chatbotMessage
                     });
                   
                 } else if (currentCategory === 'Symptom' || currentCategory === '病状') {
                   insertMessage({
                       avatar: avatarUrl,
-                      content: chatbotMessage.description
+                      content: chatbotMessage
                     });
                 } else if (currentCategory === 'Treatment' || currentCategory == '治療'){
                   insertMessage({
                       avatar: avatarUrl,
-                      content: chatbotMessage.description
-                    });
+                      content: chatbotMessage
+                    })
                 }
               }else{
                 insertMessage({

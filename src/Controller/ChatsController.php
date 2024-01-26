@@ -90,10 +90,15 @@ class ChatsController extends AppController
 
         if (isset($detectedLanguage['ja'])) {
             $trans = new GoogleTranslate();
-            $categoryData = $trans->translate('en', 'ja', $categoryData);
+
+            if ($categoryData->has('content')) {
+                $categoryData = $trans->translate('en', 'ja', $categoryData->content);
+            }elseif ($categoryData->has('description')) {
+                $categoryData = $trans->translate('en', 'ja', $categoryData->name);
+            }
         }
-        
         echo json_encode(['chatbotMessage' => $categoryData]);
+        
         
     }
 
