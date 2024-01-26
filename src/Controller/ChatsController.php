@@ -88,7 +88,7 @@ class ChatsController extends AppController
             ])->first();
         } 
 
-        if (isset($detectedLanguage['ja'])) {
+        if ($categoryData !== null && isset($detectedLanguage['ja'])) {
             $trans = new GoogleTranslate();
 
             if ($categoryData->has('content')) {

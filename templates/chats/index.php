@@ -73,7 +73,7 @@
 
   function handleBadgeClick(category) {
       currentCategory = category;
-      if (currentLanguage === 'jp') {
+      if (currentLanguage === 'ja') {
           insertMessage(translations[category], true);
           if (category === 'General Information') {
             insertMessage({
@@ -182,16 +182,32 @@
                     })
                 }
               }else{
+                if (currentLanguage === 'ja') {
+                    insertMessage({
+                      avatar: avatarUrl,
+                      content: "もっと詳細な情報や文脈を教えていただけますか？それによって、もっと効果的にお手伝いできるかと思います。"
+                    });
+                } else {
+                  
+                    insertMessage({
+                        avatar: avatarUrl,
+                        content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                    });
+                }
+              }
+            }else{
+              if (currentLanguage === 'ja') {
+                    insertMessage({
+                      avatar: avatarUrl,
+                      content: "もっと詳細な情報や文脈を教えていただけますか？それによって、もっと効果的にお手伝いできるかと思います。"
+                    });
+              } else {
+                
                 insertMessage({
                       avatar: avatarUrl,
                       content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
                     });
               }
-            }else{
-              insertMessage({
-                    avatar: avatarUrl,
-                    content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
-                  });
             }
           },
           error: function(error) {
@@ -224,11 +240,11 @@
     });
 
     // Toggle the language
-    currentLanguage = currentLanguage === 'en' ? 'jp' : 'en';
+    currentLanguage = currentLanguage === 'en' ? 'ja' : 'en';
   }
 
   function translateContent(content) {
-    if (currentLanguage === 'jp') {
+    if (currentLanguage === 'ja') {
       Object.keys(translations).forEach(function (key) {
         content = content.replace(new RegExp(escapeRegExp(translations[key]), 'g'), key);
       });
