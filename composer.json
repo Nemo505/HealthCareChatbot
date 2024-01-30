@@ -12,7 +12,8 @@
         "cakephp/plugin-installer": "^1.3",
         "mobiledetect/mobiledetectlib": "^3.74",
         "patrickschur/language-detection": "^5.3",
-        "statickidz/php-google-translate-free": "^1.2"
+        "statickidz/php-google-translate-free": "^1.2",
+        "yooper/php-text-analysis": "^1.9"
     },
     "require-dev": {
         "cakephp/bake": "^2.8",

@@ -121,4 +121,27 @@ class ChatsController extends AppController
 
     }
 
+
+    //nlp
+    public function getNlp()
+    {
+        $user = $this->Authentication->getIdentity(); // Get the currently authenticated user
+        $this->set(compact('user'));
+    }
+
+    public function addNlpMessages()
+    {
+        $this->autoRender = false;
+        $data = $this->request->getData();
+
+        // Assuming 'category' in the AJAX request
+        $newUserMessage = isset($data['content']) ? $data['content'] : null;
+
+        $tokens = tokenize($newUserMessage);
+        $normalizedTokens = normalize_tokens($tokens); 
+
+        $freqDist = freq_dist(tokenize($newUserMessage));
+        echo json_encode(['chatbotMessage' => $freqDist]);
+    }
+
 }
