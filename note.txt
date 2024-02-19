@@ -123,3 +123,6 @@ Text Input Field: Allow users to type or speak their questions.
    - **Search Functionality:** Allow users to search for specific terms or topics.
    - **Voice Input:** Implement voice recognition for users who prefer to speak their questions.
 
+
+limitation th words
+voice input 

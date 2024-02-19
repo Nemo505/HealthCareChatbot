@@ -39,12 +39,12 @@
   function insertMessage(message, isUser = false) {
     // Determine the class based on whether the message is from the user or chatbot
     if (isUser) {
-     $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
+        $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
     }else{
         $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
         '<div>' + message.content + '</div>' +
         '</div>').appendTo($('.mCSB_container')).addClass('new');
-    }
+      }
 
     updateScrollbar();
   }
@@ -81,23 +81,25 @@
             
             if (response) {
               var parsedResponse = JSON.parse(response);
+              console.log(parsedResponse.keywords, parsedResponse.chatbotMessage);
               if (parsedResponse.chatbotMessage) {
                 
                 var chatbotMessage = parsedResponse.chatbotMessage;
+
                 insertMessage({
                       avatar: avatarUrl,
-                      content: chatbotMessage
+                      content: chatbotMessage.description
                     })
               }else{
                     insertMessage({
                         avatar: avatarUrl,
-                        content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                        content: "もっと詳細や文脈を教えていただけますか？そうすれば、効果的にお手伝いできます。"
                     });
               }
             }else{
                 insertMessage({
                       avatar: avatarUrl,
-                      content: "Could you provide more details or context about what you're looking for? It will help me assist you more effectively."
+                      content: "もっと詳細や文脈を教えていただけますか？そうすれば、効果的にお手伝いできます。"
                     });
             }
           },

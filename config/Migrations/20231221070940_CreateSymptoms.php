@@ -26,6 +26,11 @@ class CreateSymptoms extends AbstractMigration
             'null' => false,
         ]);
         
+        $symptomTable->addColumn('keyword', 'string', [
+            'default' => null,
+            'null' => false,
+        ]);
+        
         $symptomTable->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,

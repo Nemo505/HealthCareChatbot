@@ -51,21 +51,44 @@
      $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
     }else{
 
-      if (message.button) {
-        $('<div class="message new "><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div class="generalInfo">How can I help you?</div>' +
-        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'General Information\')">General Information</span>' +
-        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Symptom\')">Symptom</span>' +
-        '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Treatment\')">Treatment</span>' +
-        '<div class="generalInfo" style=" padding-bottom:15px;">You can type "End" to end the process.</div>' +
-        '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
-        '</div>').appendTo($('.mCSB_container')).addClass('new');
-      }else {
-        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div style=" padding-bottom:15px; class="toTranslate">' + message.content + '</div>' +
-        '<div class="translate-text" onclick="translateUserMessage(this.previousElementSibling)">🔄Translate</div>'+
-        '</div>').appendTo($('.mCSB_container')).addClass('new');
-      }
+        if (message.button) {
+          $('<div class="message new "><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+          '<div class="generalInfo">How can I help you?</div>' +
+          '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'General Information\')">General Information</span>' +
+          '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Symptom\')">Symptom</span>' +
+          '<span class="custom-badge cursor-pointer generalInfo" onclick="handleBadgeClick(\'Treatment\')">Treatment</span>' +
+          '<div class="generalInfo" style=" padding-bottom:15px;">You can type "End" to end the process.</div>' +
+          '<div class="translate-text" onclick="translateMessage()">🔄Translate</div>'+
+          '</div>').appendTo($('.mCSB_container')).addClass('new');
+        }else if(message.star){
+           var starIcons = '';
+            for (var i = 0; i < 5; i++) {
+                starIcons += '<i class="far fa-star"></i>';
+            }
+
+            var $message = $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+            '<div style=" padding-bottom:15px; class="toTranslate">' + message.content + '</div>' +
+            '<div class="flex justify-content-center">' +
+              starIcons +
+            '</div>'+
+            '<div class="translate-text" onclick="translateUserMessage(this.previousElementSibling)">🔄Translate</div>'+
+            '</div>').appendTo($('.mCSB_container')).addClass('new');
+
+            $message.find('.fa-star').hover(function () {
+                $(this).removeClass('far').addClass('fas');
+                $(this).prevAll('.fa-star').removeClass('far').addClass('fas');
+                $(this).nextAll('.fa-star').removeClass('fas').addClass('far');
+            }, function () {
+                $(this).removeClass('fas').addClass('far');
+                $(this).prevAll('.fa-star').removeClass('fas').addClass('far');
+            });
+          
+        }else{
+          $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+            '<div style=" padding-bottom:15px; class="toTranslate">' + message.content + '</div>' +
+            '<div class="translate-text" onclick="translateUserMessage(this.previousElementSibling)">🔄Translate</div>'+
+            '</div>').appendTo($('.mCSB_container')).addClass('new');
+          }
     }
 
     updateScrollbar();
@@ -149,7 +172,13 @@
       if (newUserMessage.toLowerCase() === 'end') {
           userAskedQuestion = false;
           currentCategory = null;
-          fetchMessages(); // Restart the conversation
+          insertMessage({
+            avatar: avatarUrl,
+            content: "Thank you for using our service. Please rate your experience.",
+            star: true
+          });
+
+          // fetchMessages(); // Restart the conversation
       }else {
         $.ajax({
           type: 'POST',

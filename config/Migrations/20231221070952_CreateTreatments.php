@@ -26,6 +26,11 @@ class CreateTreatments extends AbstractMigration
             'null' => false,
         ]);
 
+        $treatmentTable->addColumn('keyword', 'string', [
+            'default' => null,
+            'null' => false,
+        ]);
+
         $treatmentTable->addColumn('symptom_id', 'integer', [
             'default' => null,
             'null' => true,

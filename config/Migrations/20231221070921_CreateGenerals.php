@@ -26,6 +26,11 @@ class CreateGenerals extends AbstractMigration
             'null' => false,
         ]);
 
+        $generalTable->addColumn('keyword', 'string', [
+            'default' => null,
+            'null' => false,
+        ]);
+
         $generalTable->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,
