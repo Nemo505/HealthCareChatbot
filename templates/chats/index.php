@@ -1,10 +1,11 @@
 <div class="chat">
   <div class="chat-title">
-    <h1>Fabio Ottaviani</h1>
     <h2>Chyu</h2>
     <figure class="avatar" data-avatar="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>">
         <img src="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>" alt="Avatar" class="w-16 h-16 rounded-full">
     </figure>
+
+    <button onclick="changeLanguage()" style="padding:0px 7px" id="language">🏴󠁧󠁢󠁥󠁮󠁧󠁿Eng</button>
 
   </div>
   <div class="messages">
@@ -12,10 +13,74 @@
   </div>
   <div class="message-box">
     <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+    <button type="button" id="record-button" class="record-button">Record</button>
     <button type="submit" class="message-submit">Send</button>
   </div>
 </div>
 <div class="bg"></div>
+
+<script>
+function changeLanguage() {
+  var dropDownLang = document.getElementById("language").textContent.trim();
+  if (dropDownLang === "🏴󠁧󠁢󠁥󠁮󠁧󠁿Eng") {
+    document.getElementById("language").textContent = "🇯🇵Jp"
+  } else if (dropDownLang === "🇯🇵Jp") {
+    document.getElementById("language").textContent = "🏴󠁧󠁢󠁥󠁮󠁧󠁿Eng"
+  }
+
+    const output = document.querySelector('.message-input');
+    const recordButton = document.getElementById('record-button');
+    let isRecording = false;
+    let recognition;
+
+    // Check if the browser supports Web Speech API
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      if (dropDownLang == "🏴󠁧󠁢󠁥󠁮󠁧󠁿Eng") {
+        recognition.lang = 'ja-JP';
+      } else if (dropDownLang == "🇯🇵Jp") {
+        recognition.lang = 'en-US';
+      }else{
+        recognition.lang = 'en-US';
+      }
+
+      recognition.onstart = function() {
+        console.log('Speech recognition started');
+        isRecording = true;
+        recordButton.textContent = 'Stop';
+      };
+
+      recognition.onresult = function(event) {
+
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        
+        output.textContent = transcript;
+      };
+
+      recognition.onend = function() {
+        console.log('Speech recognition ended');
+        isRecording = false;
+        recordButton.textContent = 'Start';
+      };
+
+      recordButton.addEventListener('click', function() {
+        if (isRecording) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
+      });
+    } else {
+      output.textContent = "Sorry, your browser doesn't support Web Speech API.";
+    }
+}
+</script>
 
 <script>
   var $messages = $('.messages-content');
@@ -308,3 +373,5 @@
 
   }
 </script>
+
+
