@@ -460,3 +460,17 @@ Bounce
     color: rgba(248, 242, 242, 0.829);
 }
 
+.emailLink {
+  color: gray;
+  /* Change color to your desired color */
+  text-decoration: none;
+  /* Remove underline */
+  transition: color 0.3s ease;
+  /* Smooth transition effect */
+}
+
+.emailLink:hover {
+  color: red;
+  /* Change color to the highlight color upon hovering */
+}
+

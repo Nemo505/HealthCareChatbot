@@ -10,6 +10,8 @@ use DonatelloZa\RakePlus\RakePlus;
 use Statickidz\GoogleTranslate;
 use LanguageDetection\Language;
 use Cake\Utility\Text;
+use RevAI\AudioConfig;
+use RevAI\RevAiStreamingClient;
 
 class ChatsController extends AppController
 {
@@ -50,7 +52,7 @@ class ChatsController extends AppController
 
             $conditions = [];
             foreach ($keywords as $keyword) {
-                $conditions['OR'][] = ['Generals.title LIKE' => "%$keyword%"];
+                $conditions['OR'][] = ['Generals.keyword LIKE' => "%$keyword%"];
             }
             
             $categoryData = $this->Generals->find('all', [
@@ -168,5 +170,6 @@ class ChatsController extends AppController
         // Output the modified text
         return $userTextArray;
     }
+    
 
 }
