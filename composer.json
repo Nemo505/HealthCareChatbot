@@ -12,7 +12,7 @@
         "cakephp/plugin-installer": "^1.3",
         "donatello-za/rake-php-plus": "^1.0",
         "guzzlehttp/guzzle": "^7.8",
-        "mobiledetect/mobiledetectlib": "^3.74",
+        "mobiledetect/mobiledetectlib": "^4.8",
         "patrickschur/language-detection": "^5.3",
         "statickidz/php-google-translate-free": "^1.2",
         "yooper/php-text-analysis": "^1.9"
