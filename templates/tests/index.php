@@ -3,7 +3,7 @@
     <h1>Fabio Ottaviani</h1>
     <h2>Chyu</h2>
     <figure class="avatar" data-avatar="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>">
-        <img src="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>" alt="Avatar" class="w-16 h-16 rounded-full">
+      <img src="<?= $this->Url->image('../uploads/avatars/' . $user->avatar, ['fullBase' => true]) ?>" alt="Avatar" class="w-16 h-16 rounded-full">
     </figure>
 
   </div>
@@ -19,7 +19,7 @@
 
 <script>
   var $messages = $('.messages-content');
-  var userAskedQuestion = false; 
+  var userAskedQuestion = false;
   var currentCategory = null;
   var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
 
@@ -39,12 +39,12 @@
   function insertMessage(message, isUser = false) {
     // Determine the class based on whether the message is from the user or chatbot
     if (isUser) {
-        $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
-    }else{
-        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+      $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
+    } else {
+      $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
         '<div>' + message.content + '</div>' +
         '</div>').appendTo($('.mCSB_container')).addClass('new');
-      }
+    }
 
     updateScrollbar();
   }
@@ -58,49 +58,52 @@
     }
   }
 
-  
+
   $('.message-submit').click(function() {
     var newUserMessage = $('.message-input').val();
     if ($.trim(newUserMessage) !== '') {
-      insertMessage(newUserMessage, true); 
+      insertMessage(newUserMessage, true);
 
       // Clear the input message in the input box
       $('.message-input').val('');
 
       //check the word
       if (newUserMessage.toLowerCase() === 'end') {
-          userAskedQuestion = false;
-          currentCategory = null;
-          fetchMessages(); // Restart the conversation
-      }else {
+        userAskedQuestion = false;
+        currentCategory = null;
+        fetchMessages(); // Restart the conversation
+      } else {
         $.ajax({
           type: 'POST',
-          url: '/chatbot/addNlpMessages', // Update the URL to your CakePHP endpoint for adding messages
-          data: { content: newUserMessage },
+          url: '/test/addNlpMessages', // Update the URL to your CakePHP endpoint for adding messages
+          data: {
+            content: newUserMessage
+          },
           success: function(response) {
-            
+
             if (response) {
               var parsedResponse = JSON.parse(response);
-              console.log(parsedResponse.keywords, parsedResponse.chatbotMessage);
+              console.log(parsedResponse.chatbotMessage);
+
               if (parsedResponse.chatbotMessage) {
-                
+
                 var chatbotMessage = parsedResponse.chatbotMessage;
 
                 insertMessage({
-                      avatar: avatarUrl,
-                      content: chatbotMessage.description
-                    })
-              }else{
-                    insertMessage({
-                        avatar: avatarUrl,
-                        content: "もっと詳細や文脈を教えていただけますか？そうすれば、効果的にお手伝いできます。"
-                    });
-              }
-            }else{
+                  avatar: avatarUrl,
+                  content: chatbotMessage.content
+                })
+              } else {
                 insertMessage({
-                      avatar: avatarUrl,
-                      content: "もっと詳細や文脈を教えていただけますか？そうすれば、効果的にお手伝いできます。"
-                    });
+                  avatar: avatarUrl,
+                  content: "Can you provide more details?"
+                });
+              }
+            } else {
+              insertMessage({
+                avatar: avatarUrl,
+                content: "Can you provide more details?"
+              });
             }
           },
           error: function(error) {
@@ -119,6 +122,4 @@
       return false;
     }
   });
-
-
 </script>

@@ -10,8 +10,6 @@ use DonatelloZa\RakePlus\RakePlus;
 use Statickidz\GoogleTranslate;
 use LanguageDetection\Language;
 use Cake\Utility\Text;
-use RevAI\AudioConfig;
-use RevAI\RevAiStreamingClient;
 
 class ChatsController extends AppController
 {
