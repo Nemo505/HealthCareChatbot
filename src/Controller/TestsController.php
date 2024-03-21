@@ -12,16 +12,18 @@ use DonatelloZa\RakePlus\RakePlus;
 use Statickidz\GoogleTranslate;
 use LanguageDetection\Language;
 use Cake\Utility\Text;
+use App\Utility\Trie;
 
 class TestsController extends AppController
 {
+
     public function index()
     {
         $user = $this->Authentication->getIdentity(); // Get the currently authenticated user
         $this->set(compact('user'));
     }
 
-    
+
     public function addNlpMessages()
     {
         $this->autoRender = false;
@@ -30,6 +32,7 @@ class TestsController extends AppController
         $keywords = array_map('strtolower', explode(' ', $newUserMessage));
 
         $this->loadModel('Generals');
+        
         $categoryCounts = []; // Initialize an array to store counts of matched keywords for each category
 
         foreach ($keywords as $keyword) {
@@ -63,9 +66,53 @@ class TestsController extends AppController
             $categoryData = $this->Generals->find('all', [
                 'conditions' => ['Generals.id' => $bestCategoryId],
             ])->first();
-        }
+        }else{
+            $suggestedQuestion = $this->suggest($keywords);
+            $categoryData['content'] =
+            "I couldn't find what you were looking for. How about considering \"$suggestedQuestion\"?";
+        } 
 
         echo json_encode(['chatbotMessage' => $categoryData]);
     }
 
+    public function suggest($keywords){
+        $question = $this->Generals->find('all', [
+            'conditions' => ['LOWER(Generals.question) LIKE' => '%' . implode('%', $keywords) . '%'],
+        ])->first();
+
+        return $question ? $question->question : "Sorry, I couldn't find any relevant question.";
+    }
+
+    //using Trie Testing
+    public function someAction()
+    {
+        $this->autoRender = false;
+
+        $data = $this->request->getData();
+        $newUserMessage = isset($data['content']) ? $data['content'] : null;
+        $keys = array_map('strtolower', explode(' ', $newUserMessage));
+
+        // Instantiate a Trie object
+        $trie = new Trie();
+
+        // Insert the words into the Trie
+        foreach ($keys as $key) {
+            $trie->insert($key);
+        }
+
+        // Perform a search for a specific word
+        $searchWord = "the";
+        $searchResult = $trie->search($searchWord);
+        if ($searchResult) {
+            echo "present";
+        } else {
+            echo "no results";
+        }
+
+        // Set the search result to be passed to the view
+        $this->set('searchResult', $searchResult);
+
+        // Pass the Trie object to the view if needed
+        $this->set('trie', $trie);
+    }
 }
