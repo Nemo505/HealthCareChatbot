@@ -10,6 +10,13 @@
     <div class="messages-content"></div>
   </div>
   <div class="message-box">
+
+    <div class="button-container">
+      <button type="button" class="helpful-button">Helpful</button>
+      <button type="button" class="unhelpful-button">Unhelpful</button>
+      <span class="close-cross" id="closeCross">×</span>
+    </div>
+
     <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
     <button type="submit" class="message-submit">Send</button>
   </div>

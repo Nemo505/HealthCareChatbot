@@ -474,3 +474,25 @@ Bounce
   /* Change color to the highlight color upon hovering */
 }
 
+/* feedback */
+
+.button-container {
+  position: absolute;
+  font: White;
+  top: -60px;
+  right: 20px;
+}
+
+.helpful-button,
+.unhelpful-button {
+  padding: 10px;
+}
+
+.close-cross {
+  position: absolute;
+  top: -10px;
+}
+.close-cross:hover {
+  color: red;
+  /* Change color on hover */
+}
