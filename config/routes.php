@@ -64,6 +64,7 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/nlp', ['controller' => 'Tests', 'action' => 'index']);
         // $builder->connect('/test/addNlpMessages', ['controller' => 'Tests', 'action' => 'addNlpMessages']);
         $builder->connect('/test/addNlpMessages', ['controller' => 'Tests', 'action' => 'addTranMessages']);
+        $builder->connect('/analysis', ['controller' => 'UserQuestions', 'action' => 'getAnalysis']);
 
         /*
          * ...and connect the rest of 'Pages' controller's URLs.

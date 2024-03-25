@@ -43,6 +43,13 @@ class CreateUserQuestions extends AbstractMigration
             'update' => 'CASCADE', 
         ]);
 
+        define('feedbacks', ['helpful', 'unhelpful']);
+        $questionTable->addColumn('feedback', 'enum', [
+            'values' => feedbacks,
+            'default' => null,
+            'null' => true,
+        ]);
+
         $questionTable->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,

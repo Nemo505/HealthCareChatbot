@@ -12,8 +12,8 @@
   <div class="message-box">
 
     <div class="button-container">
-      <button type="button" class="helpful-button">Helpful</button>
-      <button type="button" class="unhelpful-button">Unhelpful</button>
+      <button type="button" class="helpful-button">役に立つ</button>
+      <button type="button" class="unhelpful-button">役に立たない</button>
       <span class="close-cross" id="closeCross">×</span>
     </div>
 
@@ -22,6 +22,35 @@
   </div>
 </div>
 <div class="bg"></div>
+
+
+<script>
+  var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
+  // JavaScript to hide button container when closeCross is clicked
+  document.getElementById("closeCross").addEventListener("click", function() {
+    document.querySelector(".button-container").classList.add("hidden");
+  });
+
+  $(".helpful-button").on("click", function() {
+    insertMessage("役に立つ", true);
+    setTimeout(function() {
+      insertMessage({
+        avatar: avatarUrl,
+        content: 'フィードバックをありがとうございます',
+      });
+    }, 1000);
+  });
+  $(".unhelpful-button").on("click", function() {
+    insertMessage("役に立つ", true);
+    setTimeout(function() {
+      insertMessage({
+        avatar: avatarUrl,
+        content: 'フィードバックをありがとうございます',
+      });
+    }, 1000);
+  });
+</script>
+
 
 <script>
   var $messages = $('.messages-content');
@@ -111,11 +140,13 @@
                 content: "Can you provide more details?"
               });
             }
+            document.querySelector(".button-container").classList.remove("hidden");
           },
           error: function(error) {
             console.error('Error adding message:', error);
           }
         });
+
       }
 
     }
