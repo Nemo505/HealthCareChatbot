@@ -10,13 +10,6 @@
     <div class="messages-content"></div>
   </div>
   <div class="message-box">
-
-    <div class="button-container">
-      <button type="button" class="helpful-button">役に立つ</button>
-      <button type="button" class="unhelpful-button">役に立たない</button>
-      <span class="close-cross" id="closeCross">×</span>
-    </div>
-
     <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
     <button type="submit" class="message-submit">Send</button>
   </div>
@@ -25,11 +18,11 @@
 
 
 <script>
-  var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
+  // var avatarUrl = document.querySelector('.avatar').getAttribute('data-avatar');
   // JavaScript to hide button container when closeCross is clicked
-  document.getElementById("closeCross").addEventListener("click", function() {
-    document.querySelector(".button-container").classList.add("hidden");
-  });
+  // document.getElementById("closeCross").addEventListener("click", function() {
+  //   document.querySelector(".button-container").classList.add("hidden");
+  // });
 
   $(".helpful-button").on("click", function() {
     insertMessage("役に立つ", true);
@@ -76,9 +69,21 @@
     if (isUser) {
       $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
     } else {
-      $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
-        '<div>' + message.content + '</div>' +
-        '</div>').appendTo($('.mCSB_container')).addClass('new');
+      if (message.feed) {
+        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+          '<div>' + message.content + '</div>' +
+          '<div class="button-container">' +
+          '<p class="feedback-text">' + "役に立ちますか?" + '</p>' +
+          '<i class="far fa-thumbs-up"  class = "helpful-button" ></i>' +
+          '<i class="far fa-thumbs-down" class = "unhelpful-button" ></i>' +
+          '</div>' +
+          '</div>').appendTo($('.mCSB_container')).addClass('new');
+      } else {
+
+        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+          '<div>' + message.content + '</div>' +
+          '</div>').appendTo($('.mCSB_container')).addClass('new');
+      }
     }
 
     updateScrollbar();
@@ -88,7 +93,7 @@
     if (!userAskedQuestion) {
       insertMessage({
         avatar: avatarUrl,
-        content: 'How can I help you?',
+        content: 'How can I help you? <br> どのようにお手伝いできますか？',
       });
     }
   }
@@ -126,7 +131,8 @@
 
                 insertMessage({
                   avatar: avatarUrl,
-                  content: chatbotMessage.content
+                  content: chatbotMessage.content,
+                  feed: true
                 })
               } else {
                 insertMessage({
@@ -140,7 +146,6 @@
                 content: "Can you provide more details?"
               });
             }
-            document.querySelector(".button-container").classList.remove("hidden");
           },
           error: function(error) {
             console.error('Error adding message:', error);

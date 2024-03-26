@@ -477,6 +477,10 @@ Bounce
 /* feedback */
 .button-container {
   opacity: 0;
+  padding-top: 10px;
+  display: flex;
+  justify-content: end;
+  gap: 10px;
   animation: slide-up 1s ease forwards, fade-in 1s ease forwards;
 }
 
@@ -501,30 +505,11 @@ Bounce
   }
 }
 
-.button-container {
-  position: absolute;
-  font: White;
-  top: -60px;
-  right: 20px;
-}
-
-.hidden {
-  display: none;
-}
-
 .helpful-button,
 .unhelpful-button {
-  padding: 5px;
   font-weight: 500;
-  background-color: #c3f2f2;
 }
-
-
-.close-cross {
-  position: absolute;
-  top: -10px;
-}
-.close-cross:hover {
-  color: red;
-  /* Change color on hover */
+.feedback-text{
+  font-size: x-small;
+  color: gray;
 }
