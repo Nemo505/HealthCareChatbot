@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
+
+use Cake\ORM\Query;
 
 /**
  * UserQuestions Controller
@@ -108,8 +111,22 @@ class UserQuestionsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function getAnalysis() {
-        $userQuestionsTable = $this->loadModel('UserQuestions');
-    
+    public function getAnalysis()
+    {
+        $this->loadModel('UserQuestions');
+
+        $query = $this->UserQuestions->find();
+        // $query
+        //     ->select(['category', 'answer_id', 'count' => $query->func()->count('*')])
+        //     ->group(['category', 'answer_id'])
+        //     ->order(['count' => 'DESC']); 
+        $query
+            ->select(['category', 'answer_id', 'count' => $query->func()->count('*')])
+            ->group(['category', 'answer_id'])
+            ->order(['count' => 'DESC']); 
+
+        
+
+        $this->set(compact('query'));
     }
 }
