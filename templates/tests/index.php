@@ -66,18 +66,30 @@
 
   function insertMessage(message, isUser = false) {
     // Determine the class based on whether the message is from the user or chatbot
+
     if (isUser) {
       $('<div class="message message-personal">' + message + '</div>').appendTo($('.mCSB_container')).addClass('new')
     } else {
       if (message.feed) {
-        $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
+
+        var starIcons = '';
+        for (var i = 0; i < 5; i++) {
+          starIcons += '<i class="far fa-star" data-index="' + i + '"></i>';
+        }
+
+        var starMsg = $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
           '<div>' + message.content + '</div>' +
           '<div class="button-container">' +
-          '<p class="feedback-text">' + "役に立ちますか?" + '</p>' +
-          '<i class="far fa-thumbs-up"  class = "helpful-button" ></i>' +
-          '<i class="far fa-thumbs-down" class = "unhelpful-button" ></i>' +
-          '</div>' +
+          '<p class="feedback-text">' + "役に立ちますか?" + '</p>' + starIcons + '</div>' +
           '</div>').appendTo($('.mCSB_container')).addClass('new');
+
+        starMsg.find('.fa-star').on('click', function(e) {
+          var index = $(this).data('index');
+          $(this).removeClass('far').addClass('fas');
+          $(this).prevAll('.fa-star').removeClass('far').addClass('fas');
+          $(this).nextAll('.fa-star').removeClass('fas').addClass('far');
+        });
+
       } else {
 
         $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +

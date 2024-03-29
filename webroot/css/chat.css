@@ -480,7 +480,7 @@ Bounce
   padding-top: 10px;
   display: flex;
   justify-content: end;
-  gap: 10px;
+  gap: 5px;
   animation: slide-up 1s ease forwards, fade-in 1s ease forwards;
 }
 
