@@ -123,15 +123,11 @@
 
                     if (response) {
                         var parsedResponse = JSON.parse(response);
-                        console.log(parsedResponse.chatbotMessage, response);
-
-                        if (parsedResponse.chatbotMessage) {
-
-                            var chatbotMessage = parsedResponse.chatbotMessage;
+                        if (parsedResponse) {
 
                             insertMessage({
                                 avatar: avatarUrl,
-                                content: chatbotMessage,
+                                content: parsedResponse.message,
                                 feed: true
                             })
                         } else {

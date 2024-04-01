@@ -27,72 +27,50 @@ class RegistersController extends AppController
         $this->autoRender = false;
         $data = $this->request->getData();
 
+        $session = $this->request->getSession();
+        $step = $session->read('registration_step');
+
         $newUserMessage = isset($data['content']) ? $data['content'] : null;
 
-        $ld = new Language;
-        $detectedLanguage = $ld->detect($newUserMessage)->bestResults()->close();
+        switch ($step) {
+            case 'ask_name':
+                // Store the name
+                $session->write('name', $newUserMessage);
+                // Update session step
+                $session->write('registration_step', 'ask_email');
+                // Prepare response for asking email
+                $categoryData = array(
+                    'message' => "素晴らしい、ありがとうございます。" . $newUserMessage . "! あなたのメールアドレスは何ですか？",
+                    'action' => 'ask_email'
+                );
+                break;
 
-        if (isset($detectedLanguage['ja'])) {
-            $trans = new GoogleTranslate();
-            $japaneseMessage = $trans->translate('ja', 'en', $newUserMessage);
-            $keywords = explode(' ', $japaneseMessage);
-        } else {
-            $keywords = explode(' ', $newUserMessage);
-        }
-        $categoryData = "";
+            case 'ask_email':
+                // Store the email
+                $session->write('email', $newUserMessage);
+                // Update session step
+                $session->write('registration_step', 'complete');
+                // You can add further steps or go straight to completion
+                // For now, let's assume we go to completion
+                $categoryData = array(
+                    'message' => "メールアドレスを提供していただき、登録が完了しました！",
+                    'action' => 'complete'
+                );
+                break;
 
-        $registrationInProgress = false;
-        $registrationStep = 0; // Track the registration steps
-        
-        foreach ($keywords as $keyword) {
-            if ($registrationInProgress) {
-                switch ($registrationStep) {
-                    case 0:
-                        // Step 0: Ask for the full name
-                        $fullName = $newUserMessage;
-                        $registrationStep++;
-                        $categoryData .= "Thanks, $fullName. Please provide your email address.";
-                        break;
-                    case 1:
-                        // Step 1: Ask for the email address
-                        $email = $newUserMessage;
-                        $registrationStep++;
-                        $categoryData .= "Got it. Is your email address $email correct? (Yes/No)";
-                        break;
-                    case 2:
-                        // Step 2: Confirm details
-                        if (strtolower($newUserMessage) === "yes") {
-                            $categoryData .= "Great! Your registration is complete.";
-                        } else {
-                            $registrationStep = 0; // Reset to the beginning
-                            $categoryData .= "Let's start over. Please provide your full name again.";
-                        }
-                        // Either way, registration is complete, exit the loop
-                        $registrationInProgress = false;
-                        break;
-                    default:
-                        $registrationInProgress = false;
-                        break;
-                }
-            } else {
-                if ($keyword === "register") {
-                    // Start registration process
-                    $registrationInProgress .= true;
-                    $registrationStep = 0;
-
-                    $trans = new GoogleTranslate();
-                    if (isset($detectedLanguage['ja'])) {
-                        $categoryData .= $trans->translate('en', 'ja', "To register you, I'll need some details. Let's start with your full name. What's your name?");
-                    } else {
-                        $categoryData .= "To register you, I'll need some details. Let's start with your full name. What's your name?";
-                    }
-
-                    break; 
-                }
-            }
+            default:
+                // Initial step, ask for name
+                $session->write('registration_step', 'ask_name');
+                $categoryData = array(
+                    'message' => "あなたの登録のために、いくつかの詳細が必要です。まずはフルネームから始めましょう。あなたのお名前は何ですか？",
+                    'action' => 'ask_name'
+                );
+                break;
         }
 
-        echo json_encode(['chatbotMessage' => $categoryData]);
+        // Send response back to AJAX call
+        echo json_encode($categoryData);
     }
+
 
 }
