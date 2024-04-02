@@ -126,3 +126,42 @@ Text Input Field: Allow users to type or speak their questions.
 
 limitation th words
 voice input 
+
+_________________________________________________
+
+session
+
+    $session = $this->request->getSession();
+    $step = $session->read('registration_step');
+
+    switch ($step) {
+            case 'ask_name':
+                // Store the name
+                $session->write('name', $newUserMessage);
+                // Update session step
+                $session->write('registration_step', 'ask_email');
+                // Prepare response for asking email
+                $categoryData = array(
+                    'message' => "素晴らしい、ありがとうございます。" . $newUserMessage . "! あなたのメールアドレスは何ですか？",
+                    'action' => 'ask_email'
+                );
+                break;
+
+            case 'ask_email':
+                $session->write('email', $newUserMessage);
+                $session->write('registration_step', 'complete');
+                $categoryData = array(
+                    'message' => "メールアドレスを提供していただき、登録が完了しました！",
+                    'action' => 'complete'
+                );
+                break;
+
+            default:
+                // Initial step, ask for name
+                $session->write('registration_step', 'ask_name');
+                $categoryData = array(
+                    'message' => "あなたの登録のために、いくつかの詳細が必要です。まずはフルネームから始めましょう。あなたのお名前は何ですか？",
+                    'action' => 'ask_name'
+                );
+                break;
+        }

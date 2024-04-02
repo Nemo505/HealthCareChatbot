@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -18,6 +19,7 @@ $cakeDescription = 'Health Care';
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,18 +36,22 @@ $cakeDescription = 'Health Care';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
     <!-- Add this to your layout file -->
+    <!-- date -->
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
-  
+
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
 
 </head>
+
 <body>
-    
+
     <?php if (!($this->getRequest()->getParam('controller') === 'Users' && $this->getRequest()->getParam('action') === 'login')) : ?>
         <nav style="background-color: rgba(0, 12, 0, 0.8); padding: 1rem;">
             <div style="color: white; display:flex; justify-content: space-between; align-items: center;">
@@ -74,4 +80,5 @@ $cakeDescription = 'Health Care';
     <footer>
     </footer>
 </body>
+
 </html>

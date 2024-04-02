@@ -10,7 +10,7 @@
         <div class="messages-content"></div>
     </div>
     <div class="message-box">
-        <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+        <input type="text" class="message-input" placeholder="Type message...">
         <button type="submit" class="message-submit">Send</button>
     </div>
 </div>
@@ -74,7 +74,7 @@
                 var starMsg = $('<div class="message new"><figure class="avatar"><img src="' + message.avatar + '" /></figure>' +
                     '<div>' + message.content + '</div>' +
                     '<div class="button-container">' +
-                    '<p class="feedback-text">' + "役に立ちますか?" + '</p>' + starIcons + '</div>' +
+                    '<p class="feedback-text">' + "Is it helpful?" + '</p>' + starIcons + '</div>' +
                     '</div>').appendTo($('.mCSB_container')).addClass('new');
 
                 starMsg.find('.fa-star').on('click', function(e) {
@@ -115,21 +115,28 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/registers/addRegisterMessages', // Update the URL to your CakePHP endpoint for adding messages
+                url: '/registers/addAppointment', // Update the URL to your CakePHP endpoint for adding messages
                 data: {
                     content: newUserMessage
                 },
                 success: function(response) {
-
                     if (response) {
                         var parsedResponse = JSON.parse(response);
+                        console.log(parsedResponse.action);
                         if (parsedResponse) {
+                            if (parsedResponse.action == 'ask_schedule') {
+                                $('.message-input').replaceWith('<input type="text" id="datepicker" class="message-input date" placeholder="Select date...">');
+                                initializeDatepicker();
+                            } else {
+                                $('.message-input').replaceWith('<input type="text" class="message-input" placeholder="Type message...">');
+                            }
 
                             insertMessage({
                                 avatar: avatarUrl,
                                 content: parsedResponse.message,
                                 feed: true
                             })
+
                         } else {
                             insertMessage({
                                 avatar: avatarUrl,
@@ -158,4 +165,13 @@
             return false;
         }
     });
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    function initializeDatepicker() {
+        $("#datepicker").datepicker();
+    }
 </script>

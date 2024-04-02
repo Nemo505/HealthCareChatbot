@@ -274,6 +274,7 @@ Message Box
   margin: 0;
   padding-right: 20px;
   width: 265px;
+  height: 30px;
 }
 .message-box textarea:focus:-webkit-placeholder {
   color: transparent;

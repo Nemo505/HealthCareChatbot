@@ -69,6 +69,8 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/register', ['controller' => 'Registers', 'action' => 'index']);
         $builder->connect('/register/addMessages', ['controller' => 'Registers', 'action' => 'addRegisterMessages']);
 
+        $builder->connect('/register/addAppointment', ['controller' => 'Registers', 'action' => 'addAppointment']);
+
         /*
          * ...and connect the rest of 'Pages' controller's URLs.
          */

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
+use Cake\Mailer\TransportFactory;
+
 require 'vendor/autoload.php';
 require_once ROOT . DS . 'vendor' . DS . 'autoload.php';
 require_once(ROOT . DS . 'vendor' . DS . 'kazue' . DS . 'jpn_stop_words.php');
@@ -71,6 +75,70 @@ class RegistersController extends AppController
         // Send response back to AJAX call
         echo json_encode($categoryData);
     }
+
+    public function addAppointment()
+    {
+        $this->autoRender = false;
+        $data = $this->request->getData();
+        $this->request->getSession()->start();
+
+        $session = $this->request->getSession();
+        $step = $session->read('appointment_step');
+
+        $newUserMessage = isset($data['content']) ? $data['content'] : null;
+
+        switch ($step) {
+            case 'ask_schedule':
+                $categoryData = array(
+                    'message' => 'Great! When would you like to schedule?',
+                    'action' => 'ask_schedule'
+                );
+                // Update session step
+                $session->write('appointment_step', 'confirm_schedule');
+                break;
+
+            case 'confirm_schedule':
+                // Store the schedule date
+                $session->write('schedule_date', $newUserMessage);
+                // Update session step
+                $session->write('appointment_step', 'complete');
+                $categoryData = array(
+                    'message' => 'Thank you for scheduling on ' . $newUserMessage . '. I will send an email to confirm the date',
+                    'action' => 'complete'
+                );
+
+                $mailer = new Mailer('default');
+                $mailer
+                    ->setTransport('smtp')
+                    ->setViewVars([
+                        'name' => 'chyu',
+                        'email' => 'dahliahalesia8@gmail.com',
+                        'appointmentDate' => $newUserMessage, // Include appointment date
+                    ])
+                    ->setFrom(['noreply[at]codethep!xel.com' => 'Code The Pixel'])
+                    ->setTo('dahliahalesia8@gmail.com')
+                    ->setEmailFormat('html')
+                    ->setSubject('Booking an appointment')
+                    ->viewBuilder()
+                        ->setTemplate('new_appointment');
+                $mailer->deliver();
+                break;
+
+            default:
+                // Initial step, ask if user wants to schedule
+                $session->write('appointment_step', 'ask_schedule');
+                $categoryData = array(
+                    'message' => 'Would you like to schedule? (yes/no)',
+                    'action' => 'confirm'
+                );
+                break;
+        }
+
+        // Send response back to AJAX call
+        echo json_encode($categoryData);
+    }
+
+
 
 
 }
