@@ -109,13 +109,13 @@ class RegistersController extends AppController
 
                 $mailer = new Mailer('default');
                 $mailer
-                    ->setTransport('smtp')
+                    ->setTransport('default')
                     ->setViewVars([
                         'name' => 'chyu',
                         'email' => 'dahliahalesia8@gmail.com',
                         'appointmentDate' => $newUserMessage, // Include appointment date
                     ])
-                    ->setFrom(['noreply[at]codethep!xel.com' => 'Code The Pixel'])
+                    ->setFrom(['noreply@codethepixel.com' => 'Code The Pixel'])
                     ->setTo('dahliahalesia8@gmail.com')
                     ->setEmailFormat('html')
                     ->setSubject('Booking an appointment')

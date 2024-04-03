@@ -54,7 +54,10 @@ return function (RouteBuilder $routes): void {
          * Here, we are connecting '/' (base path) to a controller called 'Pages',
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
+         * 
          */
+        $builder->connect('/reset-password/:token', ['controller' => 'Users', 'action' => 'resetPassword']);
+
         $builder->connect('/', ['controller' => 'Chats', 'action' => 'index']);
         $builder->connect('/chatbot/getMessages', ['controller' => 'Chats', 'action' => 'getMessages']);
         $builder->connect('/chatbot/addMessages', ['controller' => 'Chats', 'action' => 'addMessages']);
