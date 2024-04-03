@@ -52,7 +52,13 @@ $cakeDescription = 'Health Care';
 
 <body>
 
-    <?php if (!($this->getRequest()->getParam('controller') === 'Users' && $this->getRequest()->getParam('action') === 'login')) : ?>
+    <?php
+        $currentController = $this->getRequest()->getParam('controller');
+        $currentAction = $this->getRequest()->getParam('action');
+
+    if (!($currentController === 'Users' && $currentAction === 'login') 
+        && !($currentController === 'ForgotPassword')) :
+    ?>
         <nav style="background-color: rgba(0, 12, 0, 0.8); padding: 1rem;">
             <div style="color: white; display:flex; justify-content: space-between; align-items: center;">
                 <a href="<?= $this->Url->build('/') ?>" style="text-decoration: none; color: white; font-weight: bold; font-size: 2rem;">

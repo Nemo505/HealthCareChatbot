@@ -56,7 +56,6 @@ return function (RouteBuilder $routes): void {
          * to use (in this case, templates/Pages/home.php)...
          * 
          */
-        $builder->connect('/reset-password/:token', ['controller' => 'Users', 'action' => 'resetPassword']);
 
         $builder->connect('/', ['controller' => 'Chats', 'action' => 'index']);
         $builder->connect('/chatbot/getMessages', ['controller' => 'Chats', 'action' => 'getMessages']);
@@ -110,4 +109,8 @@ return function (RouteBuilder $routes): void {
      * });
      * ```
      */
+
+
+
+    $routes->connect('/forgot-password', ['controller' => 'ForgotPassword', 'action' => 'index']);
 };

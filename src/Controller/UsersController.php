@@ -40,56 +40,6 @@ class UsersController extends AppController
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 
-    public function forgotPassword()
-    {
-        if ($this->request->is('post')) {
-            $user = $this->Users->findByEmail($this->request->getData('email'))->first();
-            if ($user) {
-                // Generate token
-                $token = bin2hex(random_bytes(16));
-                // Save token to database
-                $user->token = $token;
-                $this->Users->save($user);
-
-                // Send email with password reset link
-                // Code for sending email omitted for brevity
-            }
-        }
-    }
-
-    public function resetPassword($token)
-    {
-        $result = $this->Authentication->getResult();
-        $user = $this->Users->findByToken($token)->first();
-        if ($user) {
-            // Check token expiration
-            $expirationTime = $user->created->modify('+1 hour');
-            // if ($expirationTime < Time::now()) {
-            //     $this->Flash->error('Password reset link has expired.');
-            //     return $this->redirect(['action' => 'forgotPassword']);
-            // }
-
-            if ($this->request->is(['post', 'put'])) {
-                // Update password
-                $user->password = $this->request->getData('password');
-                $user->token = null; // Clear token
-                if ($this->Users->save($user)) {
-                    $this->Flash->success('Password has been reset successfully.');
-                    return $this->redirect(['action' => 'login']);
-                } else {
-                    $this->Flash->error('Password reset failed. Please try again.');
-                }
-            }
-        } else {
-            $this->Flash->error('Invalid password reset token.');
-            return $this->redirect(['action' => 'forgotPassword']);
-        }
-
-        $this->set(compact('user'));
-    }
-
-
-
     
     public function index()
     {

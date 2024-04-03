@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
@@ -35,6 +36,16 @@ class CreateUsers extends AbstractMigration
             'default' => null,
             'null' => false,
         ]);
+
+        $userTable->addColumn('password_reset_token', 'string', [
+            'default' => null,
+            'null' => true,
+        ]);
+        $userTable->addColumn('password_reset_expiry', 'datetime', [
+            'default' => null,
+            'null' => true,
+        ]);
+
         $userTable->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,
@@ -44,6 +55,5 @@ class CreateUsers extends AbstractMigration
             'null' => false,
         ]);
         $userTable->create();
-
     }
 }
