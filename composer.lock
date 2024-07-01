@@ -432,16 +432,16 @@
         },
         {
             "name": "donatello-za/rake-php-plus",
-            "version": "v1.0.18",
+            "version": "v1.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Donatello-za/rake-php-plus.git",
-                "reference": "e9e9c0862b3dc953d288e8f42c76e4ceaeca0619"
+                "reference": "b8772fd168b1e0ee71968d1022d5a732db9102eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Donatello-za/rake-php-plus/zipball/e9e9c0862b3dc953d288e8f42c76e4ceaeca0619",
-                "reference": "e9e9c0862b3dc953d288e8f42c76e4ceaeca0619",
+                "url": "https://api.github.com/repos/Donatello-za/rake-php-plus/zipball/b8772fd168b1e0ee71968d1022d5a732db9102eb",
+                "reference": "b8772fd168b1e0ee71968d1022d5a732db9102eb",
                 "shasum": ""
             },
             "require": {
@@ -450,8 +450,8 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "php": ">=5.5.0",
-                "phpunit/phpunit": "~4.0|~5.0"
+                "php": ">8.3.0",
+                "phpunit/phpunit": "^11.2"
             },
             "type": "library",
             "extra": {
@@ -488,7 +488,7 @@
                 "issues": "https://github.com/Donatello-za/rake-php-plus/issues",
                 "source": "https://github.com/Donatello-za/rake-php-plus"
             },
-            "time": "2022-02-23T18:42:03+00:00"
+            "time": "2024-06-26T12:29:59+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -7120,5 +7120,5 @@
         "php": ">=7.4"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
